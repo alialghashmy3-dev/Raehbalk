@@ -2,18 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>SAP ERP AI</title>
+<title>ERP Enterprise AI</title>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <style>
-body{margin:0;font-family:Cairo;background:#eef2f7}
+body{margin:0;font-family:Cairo;background:#f4f7fb}
 header{background:#0f766e;color:white;padding:18px;text-align:center}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
 
 .card{
 background:white;
+margin:10px;
 padding:15px;
 border-radius:12px;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
@@ -21,30 +20,46 @@ box-shadow:0 3px 10px rgba(0,0,0,0.1);
 
 input,button{width:100%;padding:10px;margin-top:8px}
 button{background:#0f766e;color:white;border:none}
+
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 
-<header>🏢 SAP ERP AI System</header>
+<header>🏢 Enterprise ERP AI System</header>
 
-<div class="grid">
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+<h3>🔐 Login</h3>
+<input id="u">
+<input id="p" type="password">
+<button onclick="login()">Login</button>
+</div>
 
-<!-- AI -->
+<!-- APP -->
+<div id="app" class="hidden">
+
 <div class="card">
-<h3>🤖 SAP AI</h3>
+<h3>🤖 AI ERP</h3>
 <input id="msg">
-<button onclick="ask()">Run</button>
+<button onclick="ask()">Send</button>
 <p id="out"></p>
 </div>
 
-<!-- TASKS -->
 <div class="card">
 <h3>📋 Tasks</h3>
 <input id="task">
-<button onclick="add()">Add</button>
-<button onclick="load()">Load</button>
+<button onclick="addTask()">Add</button>
+<button onclick="loadTask()">Load</button>
 <ul id="list"></ul>
+</div>
+
+<div class="card">
+<h3>💬 Chat</h3>
+<input id="chat">
+<button onclick="send()">Send</button>
+<div id="chatBox"></div>
 </div>
 
 </div>
@@ -52,8 +67,22 @@ button{background:#0f766e;color:white;border:none}
 <script>
 
 const API="http://localhost:3000";
-let token="demo"; // لاحقاً JWT
+let token="";
 
+// 🔐 login
+async function login(){
+let res=await axios.post(API+"/login",{
+username:u.value,
+password:p.value
+});
+
+token=res.data.token;
+
+loginBox.classList.add("hidden");
+app.classList.remove("hidden");
+}
+
+// 🤖 AI
 async function ask(){
 let res=await axios.post(API+"/ai",
 {message:msg.value},
@@ -63,24 +92,36 @@ let res=await axios.post(API+"/ai",
 out.innerText=res.data.reply;
 }
 
-async function add(){
-await axios.post(API+"/tasks",
-{title:task.value},
+// 📋 tasks
+async function addTask(){
+await axios.post(API+"/task",
+{task:task.value},
 {headers:{Authorization:token}}
 );
 }
 
-async function load(){
-let res=await axios.get(API+"/tasks",
+async function loadTask(){
+let res=await axios.get(API+"/task",
 {headers:{Authorization:token}}
 );
 
 list.innerHTML="";
 res.data.forEach(t=>{
 let li=document.createElement("li");
-li.textContent="📌 "+t.title;
+li.textContent="📌 "+t.task;
 list.appendChild(li);
 });
+}
+
+// 💬 chat
+async function send(){
+await axios.post(API+"/msg",
+{text:chat.value},
+{headers:{Authorization:token}}
+);
+
+chatBox.innerHTML+="<div>👤 "+chat.value+"</div>";
+chat.value="";
 }
 
 </script>
