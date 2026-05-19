@@ -2,408 +2,273 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مكتبك AI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>مكتبك AI</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Cairo', sans-serif;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Cairo',sans-serif;
     }
 
-    body {
-      background: #f3f6fb;
-      color: #1f2937;
-      min-height: 100vh;
+    body{
+      background:#f4f7fb;
+      color:#1f2937;
     }
 
-    .sidebar {
-      position: fixed;
-      right: 0;
-      top: 0;
-      width: 260px;
-      height: 100%;
-      background: linear-gradient(180deg,#0f766e,#0891b2);
-      padding: 25px;
-      color: white;
-      box-shadow: -4px 0 20px rgba(0,0,0,0.08);
+    header{
+      background:linear-gradient(135deg,#0f766e,#0891b2);
+      color:white;
+      padding:30px 20px;
+      border-bottom-left-radius:30px;
+      border-bottom-right-radius:30px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
     }
 
-    .logo {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 40px;
+    .logo{
+      font-size:32px;
+      font-weight:800;
     }
 
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .subtitle{
+      margin-top:10px;
+      color:rgba(255,255,255,0.85);
     }
 
-    .menu a {
-      text-decoration: none;
-      color: white;
-      padding: 14px 16px;
-      border-radius: 16px;
-      transition: 0.3s;
-      background: rgba(255,255,255,0.08);
+    .container{
+      padding:20px;
+      max-width:1200px;
+      margin:auto;
     }
 
-    .menu a:hover {
-      background: rgba(255,255,255,0.18);
-      transform: translateX(-4px);
+    .ai-box{
+      background:white;
+      padding:25px;
+      border-radius:28px;
+      margin-top:-40px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
     }
 
-    .main {
-      margin-right: 280px;
-      padding: 25px;
+    .ai-box h2{
+      margin-bottom:12px;
+      color:#0f766e;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
+    .ai-input{
+      display:flex;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
     }
 
-    .welcome h1 {
-      font-size: 34px;
-      font-weight: 800;
+    .ai-input input{
+      flex:1;
+      padding:15px;
+      border-radius:16px;
+      border:1px solid #d1d5db;
+      outline:none;
+      font-size:15px;
     }
 
-    .welcome p {
-      color: #6b7280;
-      margin-top: 8px;
+    .ai-input button{
+      background:#0f766e;
+      color:white;
+      border:none;
+      padding:15px 24px;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:bold;
     }
 
-    .profile {
-      background: white;
-      padding: 10px 18px;
-      border-radius: 18px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    .response{
+      margin-top:20px;
+      background:#ecfeff;
+      padding:18px;
+      border-radius:18px;
+      line-height:1.9;
+      color:#0f766e;
+      display:none;
     }
 
-    .hero {
-      background: linear-gradient(135deg,#0f766e,#06b6d4);
-      border-radius: 28px;
-      padding: 35px;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-      flex-wrap: wrap;
-      gap: 20px;
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+      margin-top:30px;
     }
 
-    .hero h2 {
-      font-size: 34px;
-      margin-bottom: 12px;
+    .card{
+      background:white;
+      padding:24px;
+      border-radius:24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+      transition:0.3s;
     }
 
-    .hero p {
-      color: rgba(255,255,255,0.85);
-      max-width: 600px;
-      line-height: 1.8;
+    .card:hover{
+      transform:translateY(-6px);
     }
 
-    .hero button {
-      margin-top: 20px;
-      background: white;
-      color: #0f766e;
-      border: none;
-      padding: 14px 24px;
-      border-radius: 16px;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: bold;
+    .card .icon{
+      font-size:40px;
+      margin-bottom:15px;
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 18px;
-      margin-top: 30px;
+    .card h3{
+      color:#0f766e;
+      margin-bottom:10px;
     }
 
-    .card {
-      background: white;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-      transition: 0.3s;
+    .tasks,
+    .chat-box{
+      margin-top:35px;
     }
 
-    .card:hover {
-      transform: translateY(-6px);
+    .section-title{
+      font-size:28px;
+      margin-bottom:18px;
+      font-weight:800;
     }
 
-    .card .icon {
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 18px;
-      background: #ecfeff;
-      font-size: 28px;
-      margin-bottom: 18px;
+    .task{
+      background:white;
+      padding:20px;
+      border-radius:22px;
+      margin-bottom:15px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 5px 15px rgba(0,0,0,0.05);
+      flex-wrap:wrap;
+      gap:10px;
     }
 
-    .card h3 {
-      margin-bottom: 10px;
-      color: #0f766e;
+    .status{
+      background:#dcfce7;
+      color:#166534;
+      padding:8px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:bold;
     }
 
-    .card p {
-      color: #6b7280;
-      line-height: 1.7;
+    .chat{
+      background:white;
+      padding:25px;
+      border-radius:25px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
     }
 
-    .section {
-      margin-top: 35px;
+    .messages{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
     }
 
-    .section-title {
-      font-size: 28px;
-      margin-bottom: 18px;
-      font-weight: 800;
+    .message{
+      max-width:80%;
+      padding:15px;
+      border-radius:18px;
+      line-height:1.8;
     }
 
-    .ai-box {
-      background: white;
-      border-radius: 28px;
-      padding: 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    .admin{
+      background:#dbeafe;
+      align-self:flex-start;
     }
 
-    .ai-input {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-      flex-wrap: wrap;
+    .employee{
+      background:#ccfbf1;
+      align-self:flex-end;
     }
 
-    .ai-input input {
-      flex: 1;
-      padding: 15px;
-      border-radius: 16px;
-      border: 1px solid #d1d5db;
-      font-size: 15px;
-      outline: none;
+    .chat-input{
+      display:flex;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
     }
 
-    .ai-input button {
-      background: #0f766e;
-      color: white;
-      border: none;
-      padding: 15px 24px;
-      border-radius: 16px;
-      cursor: pointer;
-      font-weight: bold;
+    .chat-input input{
+      flex:1;
+      padding:15px;
+      border-radius:16px;
+      border:1px solid #d1d5db;
+      outline:none;
     }
 
-    .response {
-      margin-top: 18px;
-      background: #f0fdfa;
-      padding: 18px;
-      border-radius: 18px;
-      color: #0f766e;
-      display: none;
+    .chat-input button{
+      background:#0891b2;
+      color:white;
+      border:none;
+      padding:15px 22px;
+      border-radius:16px;
+      cursor:pointer;
     }
 
-    .tasks {
-      display: grid;
-      gap: 15px;
-    }
-
-    .task {
-      background: white;
-      padding: 20px;
-      border-radius: 22px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .status {
-      background: #dcfce7;
-      color: #166534;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .chat {
-      background: white;
-      border-radius: 28px;
-      padding: 25px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    }
-
-    .messages {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 20px;
-    }
-
-    .message {
-      max-width: 80%;
-      padding: 16px;
-      border-radius: 18px;
-      line-height: 1.8;
-    }
-
-    .admin {
-      background: #dbeafe;
-      align-self: flex-start;
-    }
-
-    .employee {
-      background: #ccfbf1;
-      align-self: flex-end;
-    }
-
-    .chat-input {
-      display: flex;
-      gap: 12px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-
-    .chat-input input {
-      flex: 1;
-      padding: 15px;
-      border-radius: 16px;
-      border: 1px solid #d1d5db;
-      outline: none;
-    }
-
-    .chat-input button {
-      border: none;
-      background: #0891b2;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 16px;
-      cursor: pointer;
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      color: #6b7280;
-      padding-bottom: 20px;
-    }
-
-    @media(max-width:900px){
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-      }
-
-      .main {
-        margin-right: 0;
-      }
-
-      .hero {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    footer{
+      text-align:center;
+      padding:30px;
+      color:#6b7280;
     }
   </style></head>
-<body><div class="sidebar">
-  <div class="logo">📱 مكتبك AI</div>  <div class="menu">
-    <a href="#">🏠 الرئيسية</a>
-    <a href="#">🤖 المساعد الذكي</a>
-    <a href="#">📋 المهام</a>
-    <a href="#">💬 الدردشة</a>
-    <a href="#">📁 الملفات</a>
-    <a href="#">⚙️ الإعدادات</a>
-  </div>
-</div><div class="main">  <div class="topbar">
-    <div class="welcome">
-      <h1>مرحباً بك 👋</h1>
-      <p>إدارة أعمالك اليومية باستخدام الذكاء الاصطناعي</p>
-    </div><div class="profile">
-  👤 مستخدم النظام
+<body><header>
+  <div class="logo">📱 مكتبك AI</div>
+  <div class="subtitle">مساعد الموظف الذكي للأعمال الإدارية</div>
+</header><div class="container">  <div class="ai-box">
+    <h2>🤖 المساعد الإداري الذكي</h2>
+    <p>اكتب أي مهمة إدارية وسيقوم النظام بالمساعدة فوراً.</p><div class="ai-input">
+  <input type="text" id="prompt" placeholder="مثال: اكتب خطاب رسمي لطلب إجازة">
+  <button onclick="runAI()">تنفيذ</button>
 </div>
 
-  </div>  <div class="hero">
-    <div>
-      <h2>مساعد إداري ذكي</h2>
-      <p>
-        تطبيق احترافي يساعد الموظفين على كتابة الخطابات، تنظيم المهام، إنشاء التقارير، والتواصل الداخلي بسهولة وذكاء.
-      </p>
-      <button>ابدأ الآن</button>
-    </div><div style="font-size:90px;">🤖</div>
+<div class="response" id="response"></div>
 
-  </div>  <div class="cards">
-    <div class="card">
-      <div class="icon">📄</div>
-      <h3>الخطابات الرسمية</h3>
-      <p>إنشاء خطابات وتقارير إدارية جاهزة خلال ثوانٍ.</p>
-    </div><div class="card">
+  </div>  <div class="cards"><div class="card">
+  <div class="icon">📄</div>
+  <h3>خطابات رسمية</h3>
+  <p>إنشاء خطابات وتقارير إدارية جاهزة.</p>
+</div>
+
+<div class="card">
   <div class="icon">📋</div>
   <h3>إدارة المهام</h3>
-  <p>تنظيم الأعمال اليومية والتنبيهات الذكية.</p>
+  <p>تنظيم الأعمال والتنبيهات اليومية.</p>
 </div>
 
 <div class="card">
   <div class="icon">💬</div>
   <h3>الدردشة الداخلية</h3>
-  <p>تواصل سريع وآمن بين الموظفين والإدارة.</p>
+  <p>تواصل مباشر بين الموظفين والإدارة.</p>
 </div>
 
 <div class="card">
   <div class="icon">📁</div>
   <h3>الأرشفة الذكية</h3>
-  <p>رفع الملفات والبحث السريع داخل النظام.</p>
+  <p>تنظيم الملفات والوثائق المهمة.</p>
 </div>
 
-  </div>  <div class="section">
-    <div class="section-title">🤖 المساعد الذكي</div><div class="ai-box">
-  <p>
-    اكتب أي مهمة إدارية وسيقوم النظام بمساعدتك فوراً.
-  </p>
-
-  <div class="ai-input">
-    <input type="text" id="prompt" placeholder="مثال: اكتب خطاب رسمي لطلب إجازة">
-    <button onclick="runAI()">تنفيذ</button>
+  </div>  <div class="tasks">
+    <div class="section-title">📋 المهام اليومية</div><div class="task">
+  <div>
+    <strong>إعداد التقرير الأسبوعي</strong>
+    <p>موعد التسليم: اليوم</p>
   </div>
-
-  <div class="response" id="response"></div>
+  <div class="status">مكتمل</div>
 </div>
 
-  </div>  <div class="section">
-    <div class="section-title">📋 المهام اليومية</div><div class="tasks">
-  <div class="task">
-    <div>
-      <strong>إعداد التقرير الأسبوعي</strong>
-      <p>آخر موعد: اليوم الساعة 5 مساءً</p>
-    </div>
-    <div class="status">مكتمل</div>
+<div class="task">
+  <div>
+    <strong>مراجعة البريد الإداري</strong>
+    <p>موعد التسليم: غداً</p>
   </div>
-
-  <div class="task">
-    <div>
-      <strong>مراجعة البريد الإداري</strong>
-      <p>آخر موعد: غداً</p>
-    </div>
-    <div class="status">قيد التنفيذ</div>
-  </div>
+  <div class="status">قيد التنفيذ</div>
 </div>
 
-  </div>  <div class="section">
+  </div>  <div class="chat-box">
     <div class="section-title">💬 غرفة الدردشة</div><div class="chat">
+
   <div class="messages" id="messages">
 
     <div class="message admin">
@@ -411,7 +276,7 @@
     </div>
 
     <div class="message employee">
-      الموظف: جاري العمل على التقرير وسيتم إرساله قريباً.
+      الموظف: جاري العمل على التقرير.
     </div>
 
   </div>
@@ -420,27 +285,61 @@
     <input type="text" id="chatText" placeholder="اكتب رسالة...">
     <button onclick="sendMessage()">إرسال</button>
   </div>
+
 </div>
 
-  </div>  <footer>
-    مكتبك AI © 2026 — تصميم إداري احترافي
-  </footer></div><script>
+  </div></div><footer>
+  مكتبك AI © 2026
+</footer><script>
 
 function runAI(){
-  const prompt = document.getElementById('prompt').value;
+
+  const prompt = document.getElementById('prompt').value.toLowerCase();
   const response = document.getElementById('response');
 
-  if(prompt.trim() === ''){
-    response.style.display = 'block';
-    response.innerHTML = '⚠️ يرجى كتابة طلب أولاً';
-    return;
-  }
-
   response.style.display = 'block';
-  response.innerHTML = '🤖 تم تنفيذ الطلب: ' + prompt + '<br><br>هذه نسخة تجريبية ويمكن ربطها مستقبلاً بذكاء اصطناعي حقيقي.';
+
+  if(prompt.includes('اجازة')){
+
+    response.innerHTML = `
+    🤖 <strong>خطاب طلب إجازة:</strong><br><br>
+    السيد المدير المحترم،،<br>
+    أرجو التكرم بالموافقة على منحي إجازة لمدة يومين ابتداءً من تاريخ غداً.
+    <br><br>
+    مع خالص الشكر.
+    `;
+
+  }
+  else if(prompt.includes('تقرير')){
+
+    response.innerHTML = `
+    🤖 <strong>تقرير إداري:</strong><br><br>
+    تم إنجاز المهام اليومية بنجاح، واستكمال مراجعة البريد الإداري وتنظيم الملفات.
+    `;
+
+  }
+  else if(prompt.includes('مهمة')){
+
+    response.innerHTML = `
+    🤖 <strong>تنظيم المهام:</strong><br><br>
+    1- مراجعة البريد<br>
+    2- إعداد التقرير<br>
+    3- متابعة الموظفين
+    `;
+
+  }
+  else {
+
+    response.innerHTML = `
+    🤖 تم استلام طلبك بنجاح.<br><br>
+    هذه نسخة ذكية تعمل بدون إنترنت أو API ويمكن تطويرها لاحقاً لذكاء اصطناعي حقيقي.
+    `;
+
+  }
 }
 
 function sendMessage(){
+
   const text = document.getElementById('chatText').value;
 
   if(text.trim() === '') return;
@@ -448,6 +347,7 @@ function sendMessage(){
   const messages = document.getElementById('messages');
 
   const div = document.createElement('div');
+
   div.className = 'message employee';
   div.innerHTML = 'أنت: ' + text;
 
