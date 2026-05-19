@@ -1,360 +1,89 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مكتبك AI</title>  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Cairo',sans-serif;
-    }
+<meta charset="UTF-8">
+<title>SAP ERP AI</title>
 
-    body{
-      background:#f4f7fb;
-      color:#1f2937;
-    }
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    header{
-      background:linear-gradient(135deg,#0f766e,#0891b2);
-      color:white;
-      padding:30px 20px;
-      border-bottom-left-radius:30px;
-      border-bottom-right-radius:30px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.08);
-    }
+<style>
+body{margin:0;font-family:Cairo;background:#eef2f7}
+header{background:#0f766e;color:white;padding:18px;text-align:center}
 
-    .logo{
-      font-size:32px;
-      font-weight:800;
-    }
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
 
-    .subtitle{
-      margin-top:10px;
-      color:rgba(255,255,255,0.85);
-    }
-
-    .container{
-      padding:20px;
-      max-width:1200px;
-      margin:auto;
-    }
-
-    .ai-box{
-      background:white;
-      padding:25px;
-      border-radius:28px;
-      margin-top:-40px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.08);
-    }
-
-    .ai-box h2{
-      margin-bottom:12px;
-      color:#0f766e;
-    }
-
-    .ai-input{
-      display:flex;
-      gap:12px;
-      margin-top:18px;
-      flex-wrap:wrap;
-    }
-
-    .ai-input input{
-      flex:1;
-      padding:15px;
-      border-radius:16px;
-      border:1px solid #d1d5db;
-      outline:none;
-      font-size:15px;
-    }
-
-    .ai-input button{
-      background:#0f766e;
-      color:white;
-      border:none;
-      padding:15px 24px;
-      border-radius:16px;
-      cursor:pointer;
-      font-weight:bold;
-    }
-
-    .response{
-      margin-top:20px;
-      background:#ecfeff;
-      padding:18px;
-      border-radius:18px;
-      line-height:1.9;
-      color:#0f766e;
-      display:none;
-    }
-
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:18px;
-      margin-top:30px;
-    }
-
-    .card{
-      background:white;
-      padding:24px;
-      border-radius:24px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.05);
-      transition:0.3s;
-    }
-
-    .card:hover{
-      transform:translateY(-6px);
-    }
-
-    .card .icon{
-      font-size:40px;
-      margin-bottom:15px;
-    }
-
-    .card h3{
-      color:#0f766e;
-      margin-bottom:10px;
-    }
-
-    .tasks,
-    .chat-box{
-      margin-top:35px;
-    }
-
-    .section-title{
-      font-size:28px;
-      margin-bottom:18px;
-      font-weight:800;
-    }
-
-    .task{
-      background:white;
-      padding:20px;
-      border-radius:22px;
-      margin-bottom:15px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 5px 15px rgba(0,0,0,0.05);
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
-    .status{
-      background:#dcfce7;
-      color:#166534;
-      padding:8px 14px;
-      border-radius:12px;
-      font-size:13px;
-      font-weight:bold;
-    }
-
-    .chat{
-      background:white;
-      padding:25px;
-      border-radius:25px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.05);
-    }
-
-    .messages{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-
-    .message{
-      max-width:80%;
-      padding:15px;
-      border-radius:18px;
-      line-height:1.8;
-    }
-
-    .admin{
-      background:#dbeafe;
-      align-self:flex-start;
-    }
-
-    .employee{
-      background:#ccfbf1;
-      align-self:flex-end;
-    }
-
-    .chat-input{
-      display:flex;
-      gap:12px;
-      margin-top:18px;
-      flex-wrap:wrap;
-    }
-
-    .chat-input input{
-      flex:1;
-      padding:15px;
-      border-radius:16px;
-      border:1px solid #d1d5db;
-      outline:none;
-    }
-
-    .chat-input button{
-      background:#0891b2;
-      color:white;
-      border:none;
-      padding:15px 22px;
-      border-radius:16px;
-      cursor:pointer;
-    }
-
-    footer{
-      text-align:center;
-      padding:30px;
-      color:#6b7280;
-    }
-  </style></head>
-<body><header>
-  <div class="logo">📱 مكتبك AI</div>
-  <div class="subtitle">مساعد الموظف الذكي للأعمال الإدارية</div>
-</header><div class="container">  <div class="ai-box">
-    <h2>🤖 المساعد الإداري الذكي</h2>
-    <p>اكتب أي مهمة إدارية وسيقوم النظام بالمساعدة فوراً.</p><div class="ai-input">
-  <input type="text" id="prompt" placeholder="مثال: اكتب خطاب رسمي لطلب إجازة">
-  <button onclick="runAI()">تنفيذ</button>
-</div>
-
-<div class="response" id="response"></div>
-
-  </div>  <div class="cards"><div class="card">
-  <div class="icon">📄</div>
-  <h3>خطابات رسمية</h3>
-  <p>إنشاء خطابات وتقارير إدارية جاهزة.</p>
-</div>
-
-<div class="card">
-  <div class="icon">📋</div>
-  <h3>إدارة المهام</h3>
-  <p>تنظيم الأعمال والتنبيهات اليومية.</p>
-</div>
-
-<div class="card">
-  <div class="icon">💬</div>
-  <h3>الدردشة الداخلية</h3>
-  <p>تواصل مباشر بين الموظفين والإدارة.</p>
-</div>
-
-<div class="card">
-  <div class="icon">📁</div>
-  <h3>الأرشفة الذكية</h3>
-  <p>تنظيم الملفات والوثائق المهمة.</p>
-</div>
-
-  </div>  <div class="tasks">
-    <div class="section-title">📋 المهام اليومية</div><div class="task">
-  <div>
-    <strong>إعداد التقرير الأسبوعي</strong>
-    <p>موعد التسليم: اليوم</p>
-  </div>
-  <div class="status">مكتمل</div>
-</div>
-
-<div class="task">
-  <div>
-    <strong>مراجعة البريد الإداري</strong>
-    <p>موعد التسليم: غداً</p>
-  </div>
-  <div class="status">قيد التنفيذ</div>
-</div>
-
-  </div>  <div class="chat-box">
-    <div class="section-title">💬 غرفة الدردشة</div><div class="chat">
-
-  <div class="messages" id="messages">
-
-    <div class="message admin">
-      المدير: يرجى رفع التقرير النهائي اليوم.
-    </div>
-
-    <div class="message employee">
-      الموظف: جاري العمل على التقرير.
-    </div>
-
-  </div>
-
-  <div class="chat-input">
-    <input type="text" id="chatText" placeholder="اكتب رسالة...">
-    <button onclick="sendMessage()">إرسال</button>
-  </div>
-
-</div>
-
-  </div></div><footer>
-  مكتبك AI © 2026
-</footer><script>
-
-function runAI(){
-
-  const prompt = document.getElementById('prompt').value.toLowerCase();
-  const response = document.getElementById('response');
-
-  response.style.display = 'block';
-
-  if(prompt.includes('اجازة')){
-
-    response.innerHTML = `
-    🤖 <strong>خطاب طلب إجازة:</strong><br><br>
-    السيد المدير المحترم،،<br>
-    أرجو التكرم بالموافقة على منحي إجازة لمدة يومين ابتداءً من تاريخ غداً.
-    <br><br>
-    مع خالص الشكر.
-    `;
-
-  }
-  else if(prompt.includes('تقرير')){
-
-    response.innerHTML = `
-    🤖 <strong>تقرير إداري:</strong><br><br>
-    تم إنجاز المهام اليومية بنجاح، واستكمال مراجعة البريد الإداري وتنظيم الملفات.
-    `;
-
-  }
-  else if(prompt.includes('مهمة')){
-
-    response.innerHTML = `
-    🤖 <strong>تنظيم المهام:</strong><br><br>
-    1- مراجعة البريد<br>
-    2- إعداد التقرير<br>
-    3- متابعة الموظفين
-    `;
-
-  }
-  else {
-
-    response.innerHTML = `
-    🤖 تم استلام طلبك بنجاح.<br><br>
-    هذه نسخة ذكية تعمل بدون إنترنت أو API ويمكن تطويرها لاحقاً لذكاء اصطناعي حقيقي.
-    `;
-
-  }
+.card{
+background:white;
+padding:15px;
+border-radius:12px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
-function sendMessage(){
+input,button{width:100%;padding:10px;margin-top:8px}
+button{background:#0f766e;color:white;border:none}
+</style>
+</head>
 
-  const text = document.getElementById('chatText').value;
+<body>
 
-  if(text.trim() === '') return;
+<header>🏢 SAP ERP AI System</header>
 
-  const messages = document.getElementById('messages');
+<div class="grid">
 
-  const div = document.createElement('div');
+<!-- AI -->
+<div class="card">
+<h3>🤖 SAP AI</h3>
+<input id="msg">
+<button onclick="ask()">Run</button>
+<p id="out"></p>
+</div>
 
-  div.className = 'message employee';
-  div.innerHTML = 'أنت: ' + text;
+<!-- TASKS -->
+<div class="card">
+<h3>📋 Tasks</h3>
+<input id="task">
+<button onclick="add()">Add</button>
+<button onclick="load()">Load</button>
+<ul id="list"></ul>
+</div>
 
-  messages.appendChild(div);
+</div>
 
-  document.getElementById('chatText').value = '';
+<script>
+
+const API="http://localhost:3000";
+let token="demo"; // لاحقاً JWT
+
+async function ask(){
+let res=await axios.post(API+"/ai",
+{message:msg.value},
+{headers:{Authorization:token}}
+);
+
+out.innerText=res.data.reply;
 }
 
-</script></body>
+async function add(){
+await axios.post(API+"/tasks",
+{title:task.value},
+{headers:{Authorization:token}}
+);
+}
+
+async function load(){
+let res=await axios.get(API+"/tasks",
+{headers:{Authorization:token}}
+);
+
+list.innerHTML="";
+res.data.forEach(t=>{
+let li=document.createElement("li");
+li.textContent="📌 "+t.title;
+list.appendChild(li);
+});
+}
+
+</script>
+
+</body>
 </html>
