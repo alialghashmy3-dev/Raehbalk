@@ -1,129 +1,81 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>ERP Enterprise AI</title>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-<style>
-body{margin:0;font-family:Cairo;background:#f4f7fb}
-header{background:#0f766e;color:white;padding:18px;text-align:center}
-
-.card{
-background:white;
-margin:10px;
-padding:15px;
-border-radius:12px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
-}
-
-input,button{width:100%;padding:10px;margin-top:8px}
-button{background:#0f766e;color:white;border:none}
-
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8" />
+  <title>MediPrice AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 
-<body>
+<body class="bg-gray-100 p-6">
 
-<header>🏢 Enterprise ERP AI System</header>
+  <h1 class="text-3xl font-bold text-center mb-6">
+    MediPrice AI - تحليل الأسعار الطبية
+  </h1>
 
-<!-- LOGIN -->
-<div class="card" id="loginBox">
-<h3>🔐 Login</h3>
-<input id="u">
-<input id="p" type="password">
-<button onclick="login()">Login</button>
-</div>
+  <!-- لوحة الإحصائيات -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
-<!-- APP -->
-<div id="app" class="hidden">
+    <div class="bg-white p-4 rounded-xl shadow">
+      <h2>عدد المنشآت</h2>
+      <p id="facilitiesCount" class="text-2xl font-bold">0</p>
+    </div>
 
-<div class="card">
-<h3>🤖 AI ERP</h3>
-<input id="msg">
-<button onclick="ask()">Send</button>
-<p id="out"></p>
-</div>
+    <div class="bg-white p-4 rounded-xl shadow">
+      <h2>عدد الخدمات</h2>
+      <p id="servicesCount" class="text-2xl font-bold">0</p>
+    </div>
 
-<div class="card">
-<h3>📋 Tasks</h3>
-<input id="task">
-<button onclick="addTask()">Add</button>
-<button onclick="loadTask()">Load</button>
-<ul id="list"></ul>
-</div>
+    <div class="bg-white p-4 rounded-xl shadow">
+      <h2>متوسط الأسعار</h2>
+      <p id="avgPrice" class="text-2xl font-bold">0</p>
+    </div>
 
-<div class="card">
-<h3>💬 Chat</h3>
-<input id="chat">
-<button onclick="send()">Send</button>
-<div id="chatBox"></div>
-</div>
+  </div>
 
-</div>
+  <!-- قائمة المنشآت -->
+  <div id="list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
 <script>
+  // 🔌 ربط Supabase
+  const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+  const SUPABASE_KEY = "YOUR_ANON_KEY";
 
-const API="http://localhost:3000";
-let token="";
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 🔐 login
-async function login(){
-let res=await axios.post(API+"/login",{
-username:u.value,
-password:p.value
-});
+  // 📊 تحميل الإحصائيات
+  async function loadStats() {
 
-token=res.data.token;
+    const { data: facilities } = await client.from('facilities').select('*');
+    const { data: services } = await client.from('services').select('*');
+    const { data: pricing } = await client.from('pricing').select('price');
 
-loginBox.classList.add("hidden");
-app.classList.remove("hidden");
-}
+    document.getElementById("facilitiesCount").innerText = facilities.length;
+    document.getElementById("servicesCount").innerText = services.length;
 
-// 🤖 AI
-async function ask(){
-let res=await axios.post(API+"/ai",
-{message:msg.value},
-{headers:{Authorization:token}}
-);
+    if (pricing.length > 0) {
+      const avg = pricing.reduce((a,b)=>a + b.price, 0) / pricing.length;
+      document.getElementById("avgPrice").innerText = avg.toFixed(2);
+    }
+  }
 
-out.innerText=res.data.reply;
-}
+  // 🏥 تحميل المنشآت
+  async function loadFacilities() {
+    const { data } = await client.from('facilities').select('*');
 
-// 📋 tasks
-async function addTask(){
-await axios.post(API+"/task",
-{task:task.value},
-{headers:{Authorization:token}}
-);
-}
+    document.getElementById("list").innerHTML =
+      data.map(f => `
+        <div class="bg-white p-4 rounded-xl shadow">
+          <h3 class="text-xl font-bold">${f.name}</h3>
+          <p>📍 ${f.city || "غير محدد"}</p>
+          <p>📞 ${f.phone || "-"}</p>
+        </div>
+      `).join('');
+  }
 
-async function loadTask(){
-let res=await axios.get(API+"/task",
-{headers:{Authorization:token}}
-);
-
-list.innerHTML="";
-res.data.forEach(t=>{
-let li=document.createElement("li");
-li.textContent="📌 "+t.task;
-list.appendChild(li);
-});
-}
-
-// 💬 chat
-async function send(){
-await axios.post(API+"/msg",
-{text:chat.value},
-{headers:{Authorization:token}}
-);
-
-chatBox.innerHTML+="<div>👤 "+chat.value+"</div>";
-chat.value="";
-}
-
+  // 🚀 تشغيل النظام
+  loadStats();
+  loadFacilities();
 </script>
 
 </body>
